@@ -9,8 +9,8 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "april13",
+    "title": "Utah Housing Affordability Analysis - STAT 386",
     "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\nI am making a change"
+    "text": "This is a project website by Sujin Leek and Matthew Conger recording our work with US Census Data regarding Utah housing. We were curious as to what specific factors were affecting the decrease in affordability and availability of single-family homes in Utah.\nA streamlit app for seeing exploratory data analysis and plots can be found here:\nThis is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
   }
 ]
