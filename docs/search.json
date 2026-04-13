@@ -1,16 +1,58 @@
 [
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "About this site"
-  },
-  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Utah Housing Affordability Analysis - STAT 386",
     "section": "",
     "text": "This is a project website by Sujin Leek and Matthew Conger recording our work with US Census Data regarding Utah housing. We were curious as to what specific factors were affecting the decrease in affordability and availability of single-family homes in Utah.\nA streamlit app for seeing exploratory data analysis and plots can be found here:\nThis is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
+  },
+  {
+    "objectID": "technical_report.html",
+    "href": "technical_report.html",
+    "title": "Technical Report",
+    "section": "",
+    "text": "A prominent topic over the past decade has been the continued rise in prices of single-family homes in America. Prices of housing contribute to wealth inequality and perpetuate barriers to family formation and upward mobility, which negatively affect many crises that the United States of America currently faces. Our hope with this project was to gain some empirical insight into why housing has become less accessible for young Americans in recent years. Using a fixed-panel regression model, we were able to isolate household income and owner-renter income gap as the two strongest predictors of rising ownership costs."
+  },
+  {
+    "objectID": "technical_report.html#abstract",
+    "href": "technical_report.html#abstract",
+    "title": "Technical Report",
+    "section": "",
+    "text": "A prominent topic over the past decade has been the continued rise in prices of single-family homes in America. Prices of housing contribute to wealth inequality and perpetuate barriers to family formation and upward mobility, which negatively affect many crises that the United States of America currently faces. Our hope with this project was to gain some empirical insight into why housing has become less accessible for young Americans in recent years. Using a fixed-panel regression model, we were able to isolate household income and owner-renter income gap as the two strongest predictors of rising ownership costs."
+  },
+  {
+    "objectID": "technical_report.html#introduction",
+    "href": "technical_report.html#introduction",
+    "title": "Technical Report",
+    "section": "Introduction",
+    "text": "Introduction\nOver the past decade, a prominent social and economic issue has been the lack of accessibility to housing. The notion of the American Dream suggests that all citizens should be afforded the privilege of owning a house provided they work hard and manage money accordingly, but in recent years, this dream has become less realistic for many Americans.\nWhile it would have been ideal to look into single-family home purchase accessibility for the entirety of the United States of America, given the constraints we were working with, we decided to focus on data from Utah, found through the US Census."
+  },
+  {
+    "objectID": "technical_report.html#data-acquisition-and-wrangling",
+    "href": "technical_report.html#data-acquisition-and-wrangling",
+    "title": "Technical Report",
+    "section": "Data Acquisition and Wrangling",
+    "text": "Data Acquisition and Wrangling\nData was obtained through the US Census Bureau’s American Community Survey (2013-2023). We constructed a dataset spanning 772 census tracts across Utah."
+  },
+  {
+    "objectID": "technical_report.html#model-selection-and-validation",
+    "href": "technical_report.html#model-selection-and-validation",
+    "title": "Technical Report",
+    "section": "Model Selection and Validation",
+    "text": "Model Selection and Validation\nWe built a two-way fixed effects (or fixed panel) regression model to identify within-tract drivers of ownership costs. We initially wanted to use a simple multiple linear regression model, but found that we were explaining almost none of the variance in our data. A fixed effects model helps to remedy the inevitable unknown elements of variance in such an economic model, as it holds certain elements constant to account for inherent variance.\nOur model controls for tract-level fixed effects, meaning time-invariant characteristics of a neighborhood like location and county \\(\\times\\) year fixed effects, which account for unknown variables like employer expansion and COVID-era impacts.\n\\[\ny_{it} = \\beta X_{it} + \\alpha_i + \\lambda_{c(i), t} + u_{i,t}\n\\]\nwhere $i = $ tract (Census GEOID), $t = $ year, and $c(i) = $ county of tract \\(i\\).\n\\(\\alpha_i\\) stands for tract fixed effect, which controls for anything constant within a tract over time, like location desirability, zoning baseline, and neighborhood quality. In other words, \\(\\alpha\\) lets us compare a tract to itself over time.\n\\(\\lambda_{c(i), t}\\) stands for the county \\(\\times\\) year fixed effect, controlling for anything affecting a county in a specific year; things like local economic shocks (ex: big employer entering or leaving), policy changes, or impacts from COVID. In other words, \\(\\lambda_{c(i), t}\\) allows us to remove shared shocks across nearby areas at the same time."
+  },
+  {
+    "objectID": "technical_report.html#analyses-results-and-interpretation",
+    "href": "technical_report.html#analyses-results-and-interpretation",
+    "title": "Technical Report",
+    "section": "Analyses, Results, and Interpretation",
+    "text": "Analyses, Results, and Interpretation\nA table depicting the results of the fixed panel model is below.\nThe complexity of this model leads to a lot of things to consider. For example, while “Absorbed \\(R^2\\)” is impressively high, the county \\(\\times\\) year fixed effect will by nature increase the \\(R^2\\) metric. So, we need to use other, more subjective metrics to judge the validity of our model. We found after fitting two different models (the first being a one-way fixed effects model) that main variables were more stable in our current model.\nIn particular, the coefficients on median household income and the owner-renter income gap remained consistent in both magnitude and statistical significance, suggesting that these relationships are not driven by broader county-level shocks. Overall, this stability across model specifications provides evidence that our results are not sensitive to unobserved, time-varying county-level factors, and supports the use of the more complex model as a credible framework for identifying within-tract drivers of housing costs."
+  },
+  {
+    "objectID": "technical_report.html#conclusions",
+    "href": "technical_report.html#conclusions",
+    "title": "Technical Report",
+    "section": "Conclusions",
+    "text": "Conclusions\nthis file used to be about.qmd and titled About"
   }
 ]

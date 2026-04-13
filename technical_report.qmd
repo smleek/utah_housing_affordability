@@ -1,0 +1,74 @@
+---
+title: "Technical Report"
+---
+
+## Abstract ##
+  
+
+A prominent topic over the past decade has been the continued rise in prices of single-family homes in America. Prices of housing contribute to wealth inequality and perpetuate barriers to family formation and upward mobility, which negatively affect many crises that the United States of America currently faces. Our hope with this project was to gain some empirical insight into why housing has become less accessible for young Americans in recent years. Using a fixed-panel regression model, we were able to isolate household income and owner-renter income gap as the two strongest predictors of rising ownership costs. 
+
+
+## Introduction ##
+
+Over the past decade, a prominent social and economic issue has been the lack of accessibility to housing. The notion of the American Dream suggests that all citizens should be afforded the privilege of owning a house provided they work hard and manage money accordingly, but in recent years, this dream has become less realistic for many Americans. 
+
+While it would have been ideal to look into single-family home purchase accessibility for the entirety of the United States of America, given the constraints we were working with, we decided to focus on data from Utah, found through the US Census. 
+
+## Data Acquisition and Wrangling ##
+
+Data was obtained through the US Census Bureau's American Community Survey (2013-2023). We constructed a dataset spanning 772 census tracts across Utah. 
+
+## Model Selection and Validation ##
+
+We built a two-way fixed effects (or fixed panel) regression model to identify within-tract drivers of ownership costs. We initially wanted to use a simple multiple linear regression model, but found that we were explaining almost none of the variance in our data. A fixed effects model helps to remedy the inevitable unknown elements of variance in such an economic model, as it holds certain elements constant to account for inherent variance. 
+
+Our model controls for tract-level fixed effects, meaning time-invariant characteristics of a neighborhood like location and county $\times$ year fixed effects, which account for unknown variables like employer expansion and COVID-era impacts. 
+
+$$
+y_{it} = \beta X_{it} + \alpha_i + \lambda_{c(i), t} + u_{i,t}
+$$
+
+where $i = $ tract (Census GEOID), $t = $ year, and $c(i) = $ county of tract $i$.
+
+$\alpha_i$ stands for tract fixed effect, which controls for anything constant within a tract over time, like location desirability, zoning baseline, and neighborhood quality. In other words, $\alpha$ lets us compare a tract to itself over time. 
+
+$\lambda_{c(i), t}$ stands for the county $\times$ year fixed effect, controlling for anything affecting a county in a specific year; things like local economic shocks (ex: big employer entering or leaving), policy changes, or impacts from COVID. In other words, $\lambda_{c(i), t}$ allows us to remove shared shocks across nearby areas at the same time.
+
+
+## Analyses, Results, and Interpretation ##
+
+A table depicting the results of the fixed panel model is below. 
+
+
+\begin{table}[htbp]
+\centering
+\caption{Fixed Effects Model (Tract FE + County$\times$Year FE)}
+\begin{tabular}{lrrrrrr}
+\toprule
+ & Coef & Std. Err. & t-stat & p-value & CI Low & CI High \\
+\midrule
+pct\_sf\_renter\_occupied & -103.558 & 64.051 & -1.617 & 0.106 & -229.097 & 21.981 \\
+median\_household\_income & 0.0018 & 0.0004 & 4.851 & 0.000 & 0.0011 & 0.0026 \\
+owner\_renter\_income\_gap & 0.0006 & 0.0002 & 3.925 & 0.000 & 0.0003 & 0.0009 \\
+pct\_vacant & 31.207 & 72.176 & 0.432 & 0.666 & -110.258 & 172.673 \\
+pop\_in\_occupied\_total & 0.0088 & 0.0046 & 1.934 & 0.053 & -0.0001 & 0.0178 \\
+\midrule
+Observations & \multicolumn{6}{r}{8,284} \\
+Absorbed $R^2$ & \multicolumn{6}{r}{0.9455} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+The complexity of this model leads to a lot of things to consider. For example, while "Absorbed $R^2$" is impressively high, the county $\times$ year fixed effect will by nature increase the $R^2$ metric. So, we need to use other, more subjective metrics to judge the validity of our model. We found after fitting two different models (the first being a one-way fixed effects model) that main variables were more stable in our current model. 
+
+In particular, the coefficients on median household income and the owner-renter income gap remained consistent in both magnitude and statistical significance, suggesting that these relationships are not driven by broader county-level shocks. Overall, this stability across model specifications provides evidence that our results are not sensitive to unobserved, time-varying county-level factors, and supports the use of the more complex model as a credible framework for identifying within-tract drivers of housing costs.
+
+## Conclusions ##
+ 
+
+
+
+
+
+this file used to be about.qmd and titled About
