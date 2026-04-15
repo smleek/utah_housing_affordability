@@ -1,10 +1,94 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Utah Housing Affordability Analysis - STAT 386",
+    "objectID": "tutorial.html",
+    "href": "tutorial.html",
+    "title": "Tutorial: Accessing and Exploring the Data",
     "section": "",
-    "text": "This is a project website by Sujin Leek and Matthew Conger recording our work with US Census Data regarding Utah housing. We were curious as to what specific factors were affecting the decrease in affordability and availability of single-family homes in Utah.\nA streamlit app for seeing exploratory data analysis and plots can be found here:\nA link to the Github Repository for the Python package used to complete this analysis here:\nThis website includes a technical report, documentation, and a tutorial. Navigate using the tabs above.\nThis is a Quarto website. To learn more about Quarto websites visit https://quarto.org/docs/websites."
+    "text": "This tutorial walks through fetching, cleaning, and doing initial exploration of the Utah housing affordability dataset."
+  },
+  {
+    "objectID": "tutorial.html#installation",
+    "href": "tutorial.html#installation",
+    "title": "Tutorial: Accessing and Exploring the Data",
+    "section": "Installation",
+    "text": "Installation\nInstall the utah-housing package and set your Census API key before running any code cells.\npip install utah-housing\nSet your Census API key (obtain a free key at https://api.census.gov/data/key_signup.html):\n\nimport os\nos.environ[\"CENSUS_API_KEY\"] = \"your_census_api_key_here\""
+  },
+  {
+    "objectID": "tutorial.html#reading-in-the-data",
+    "href": "tutorial.html#reading-in-the-data",
+    "title": "Tutorial: Accessing and Exploring the Data",
+    "section": "Reading in the Data",
+    "text": "Reading in the Data\n\nimport pandas as pd\nfrom utah_housing import fetch_all_years, OUTCOME, BASE_PREDICTORS, COMPLEX_PREDICTORS\n\n# Fetch ACS 5-year estimates for Utah census tracts, 2009–2023\ndf = fetch_all_years(years=range(2009, 2024))\ndf.head()\n\n\n# Save to CSV so you can reload without hitting the API again\ndf.to_csv(\"data/utah_housing.csv\", index=False)\n\n\n# Reload from CSV (faster than re-fetching)\ndf = pd.read_csv(\"data/utah_housing.csv\")\ndf.head()"
+  },
+  {
+    "objectID": "tutorial.html#initial-exploration",
+    "href": "tutorial.html#initial-exploration",
+    "title": "Tutorial: Accessing and Exploring the Data",
+    "section": "Initial Exploration",
+    "text": "Initial Exploration\n\nprint(\"Shape:\", df.shape)\nprint(\"\\nOutcome variable:\", OUTCOME)\nprint(\"Base predictors:\", BASE_PREDICTORS)\nprint(\"Complex predictors:\", COMPLEX_PREDICTORS)\n\n\n# Check for missing values in key columns\nanalysis_cols = [\"year\", \"GEOID\"] + [OUTCOME] + COMPLEX_PREDICTORS\ndf[analysis_cols].isnull().sum()"
+  },
+  {
+    "objectID": "tutorial.html#cleaning-the-data",
+    "href": "tutorial.html#cleaning-the-data",
+    "title": "Tutorial: Accessing and Exploring the Data",
+    "section": "Cleaning the Data",
+    "text": "Cleaning the Data\n\n\n# Drop rows missing the outcome variable\ndf_clean = df.dropna(subset=[OUTCOME]).copy()\n\n# Extract county name from the NAME field for easier filtering\ndf_clean[\"county_name\"] = df_clean[\"NAME\"].str.extract(r\",\\s*(.+?)\\s+County\", expand=False)\n\nprint(f\"Rows after cleaning: {len(df_clean):,}\")\ndf_clean.head()"
+  },
+  {
+    "objectID": "tutorial.html#subsetting-by-county-or-year",
+    "href": "tutorial.html#subsetting-by-county-or-year",
+    "title": "Tutorial: Accessing and Exploring the Data",
+    "section": "Subsetting by County or Year",
+    "text": "Subsetting by County or Year\n\n# Filter to a specific county\nsalt_lake = df_clean[df_clean[\"county_name\"] == \"Salt Lake\"]\nprint(salt_lake.shape)\n\n# Filter to a specific year\ndf_2023 = df_clean[df_clean[\"year\"] == 2023]\nprint(df_2023.shape)"
+  },
+  {
+    "objectID": "tutorial.html#basic-summary-statistics",
+    "href": "tutorial.html#basic-summary-statistics",
+    "title": "Tutorial: Accessing and Exploring the Data",
+    "section": "Basic Summary Statistics",
+    "text": "Basic Summary Statistics\n\nsummary_cols = [OUTCOME] + COMPLEX_PREDICTORS\ndf_clean[summary_cols].describe().round(2)\n\n\nThe data is now ready for EDA and modeling (see the Technical Report)."
+  },
+  {
+    "objectID": "documentation.html",
+    "href": "documentation.html",
+    "title": "Documentation",
+    "section": "",
+    "text": "[Project and data source overview goes here.]"
+  },
+  {
+    "objectID": "documentation.html#overview",
+    "href": "documentation.html#overview",
+    "title": "Documentation",
+    "section": "",
+    "text": "[Project and data source overview goes here.]"
+  },
+  {
+    "objectID": "documentation.html#data-source",
+    "href": "documentation.html#data-source",
+    "title": "Documentation",
+    "section": "Data Source",
+    "text": "Data Source\n\n\n\n\nProperty\nDetails\n\n\n\n\nSource\n[Data source name and URL]\n\n\nCoverage\n[Geographic scope, e.g. Utah census tracts]\n\n\nYears\n[Year range, e.g. 2009–2023]\n\n\nUnit of observation\n[e.g. Census tract × year]\n\n\nTotal rows\n[e.g. ~9,240]"
+  },
+  {
+    "objectID": "documentation.html#key-variables",
+    "href": "documentation.html#key-variables",
+    "title": "Documentation",
+    "section": "Key Variables",
+    "text": "Key Variables\n\n\nOutcome Variable\n\n\n\n\n\n\n\nVariable\nDescription\n\n\n\n\n[outcome_variable]\n[What it measures, e.g. median monthly owner costs with mortgage]\n\n\n\n\n\nPredictors\n\n\n\nVariable\nDescription\n\n\n\n\n[predictor_1]\n[Description]\n\n\n[predictor_2]\n[Description]\n\n\n[predictor_3]\n[Description]\n\n\n[predictor_4]\n[Description]\n\n\n[predictor_5]\n[Description]"
+  },
+  {
+    "objectID": "documentation.html#python-package-utah-housing",
+    "href": "documentation.html#python-package-utah-housing",
+    "title": "Documentation",
+    "section": "Python Package: utah-housing",
+    "text": "Python Package: utah-housing\n\nThe utah-housing package provides functions to fetch ACS data directly from the Census API and compute derived housing affordability metrics.\n\nInstallation\npip install utah-housing\n\nNote: A free Census API key is required. Obtain one at https://api.census.gov/data/key_signup.html and set it as an environment variable:\nexport CENSUS_API_KEY=\"your_key_here\"\n\n\n\nCore Functions\n\nfrom utah_housing import fetch_all_years, OUTCOME, BASE_PREDICTORS, COMPLEX_PREDICTORS\n\n# Fetch ACS 5-year estimates for all years\ndf = fetch_all_years(years=range(2009, 2024))\n\n# Inspect variable groupings\nprint(\"Outcome:\", OUTCOME)\nprint(\"Base predictors:\", BASE_PREDICTORS)\nprint(\"Complex predictors:\", COMPLEX_PREDICTORS)\n\n\n\nFunction Reference\n\n\n\n\n\n\n\n\nFunction\nDescription\n\n\n\n\nfetch_all_years(years)\nFetches ACS 5-year estimates for all Utah census tracts across the given year range\n\n\nOUTCOME\nString constant naming the outcome variable\n\n\nBASE_PREDICTORS\nList of basic predictor variable names\n\n\nCOMPLEX_PREDICTORS\nList of extended predictor variable names"
+  },
+  {
+    "objectID": "documentation.html#license",
+    "href": "documentation.html#license",
+    "title": "Documentation",
+    "section": "License",
+    "text": "License\n\nMIT 2025"
   },
   {
     "objectID": "technical_report.html",
@@ -54,5 +138,12 @@
     "title": "Technical Report",
     "section": "Conclusions",
     "text": "Conclusions\nthis file used to be about.qmd and titled About"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Utah Housing Affordability Analysis - STAT 386",
+    "section": "",
+    "text": "This is a project website by Sujin Leek and Matthew Conger recording our work with US Census Data regarding Utah housing. We were curious as to what specific factors were affecting the decrease in affordability and availability of single-family homes in Utah.\nA streamlit app for seeing exploratory data analysis and plots can be found here.\nA link to the Github Repository for the Python package used to complete this analysis here.\nThis website includes a technical report, documentation, and a tutorial. Navigate using the tabs above.\nThis is a Quarto website. To learn more about Quarto websites visit https://quarto.org/docs/websites."
   }
 ]

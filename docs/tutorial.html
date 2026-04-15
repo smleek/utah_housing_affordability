@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Technical Report – Utah Housing Affordability Analysis - STAT 386</title>
+<title>Tutorial: Accessing and Exploring the Data – Utah Housing Affordability Analysis - STAT 386</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -69,35 +104,6 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -124,7 +130,7 @@ window.Quarto = {
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./technical_report.html" aria-current="page"> 
+    <a class="nav-link" href="./technical_report.html"> 
 <span class="menu-text">Technical Report</span></a>
   </li>  
   <li class="nav-item">
@@ -132,7 +138,7 @@ window.Quarto = {
 <span class="menu-text">Documentation</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./tutorial.html"> 
+    <a class="nav-link active" href="./tutorial.html" aria-current="page"> 
 <span class="menu-text">Tutorial: Accessing and Exploring the Data</span></a>
   </li>  
 </ul>
@@ -151,12 +157,12 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#abstract" id="toc-abstract" class="nav-link active" data-scroll-target="#abstract">Abstract</a></li>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#data-acquisition-and-wrangling" id="toc-data-acquisition-and-wrangling" class="nav-link" data-scroll-target="#data-acquisition-and-wrangling">Data Acquisition and Wrangling</a></li>
-  <li><a href="#model-selection-and-validation" id="toc-model-selection-and-validation" class="nav-link" data-scroll-target="#model-selection-and-validation">Model Selection and Validation</a></li>
-  <li><a href="#analyses-results-and-interpretation" id="toc-analyses-results-and-interpretation" class="nav-link" data-scroll-target="#analyses-results-and-interpretation">Analyses, Results, and Interpretation</a></li>
-  <li><a href="#conclusions" id="toc-conclusions" class="nav-link" data-scroll-target="#conclusions">Conclusions</a></li>
+  <li><a href="#installation" id="toc-installation" class="nav-link active" data-scroll-target="#installation">Installation</a></li>
+  <li><a href="#reading-in-the-data" id="toc-reading-in-the-data" class="nav-link" data-scroll-target="#reading-in-the-data">Reading in the Data</a></li>
+  <li><a href="#initial-exploration" id="toc-initial-exploration" class="nav-link" data-scroll-target="#initial-exploration">Initial Exploration</a></li>
+  <li><a href="#cleaning-the-data" id="toc-cleaning-the-data" class="nav-link" data-scroll-target="#cleaning-the-data">Cleaning the Data</a></li>
+  <li><a href="#subsetting-by-county-or-year" id="toc-subsetting-by-county-or-year" class="nav-link" data-scroll-target="#subsetting-by-county-or-year">Subsetting by County or Year</a></li>
+  <li><a href="#basic-summary-statistics" id="toc-basic-summary-statistics" class="nav-link" data-scroll-target="#basic-summary-statistics">Basic Summary Statistics</a></li>
   </ul>
 </nav>
     </div>
@@ -165,7 +171,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Technical Report</h1>
+<h1 class="title">Tutorial: Accessing and Exploring the Data</h1>
 </div>
 
 
@@ -182,39 +188,91 @@ window.Quarto = {
 </header>
 
 
-<section id="abstract" class="level2">
-<h2 class="anchored" data-anchor-id="abstract">Abstract</h2>
-<p>A prominent topic over the past decade has been the continued rise in prices of single-family homes in America. Prices of housing contribute to wealth inequality and perpetuate barriers to family formation and upward mobility, which negatively affect many crises that the United States of America currently faces. Our hope with this project was to gain some empirical insight into why housing has become less accessible for young Americans in recent years. Using a fixed-panel regression model, we were able to isolate household income and owner-renter income gap as the two strongest predictors of rising ownership costs.</p>
+<p>This tutorial walks through fetching, cleaning, and doing initial exploration of the Utah housing affordability dataset.</p>
+<hr>
+<section id="installation" class="level2">
+<h2 class="anchored" data-anchor-id="installation">Installation</h2>
+<p>Install the <code>utah-housing</code> package and set your Census API key before running any code cells.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install utah-housing</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Set your Census API key (obtain a free key at <a href="https://api.census.gov/data/key_signup.html" class="uri">https://api.census.gov/data/key_signup.html</a>):</p>
+<div id="6bf97510" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"CENSUS_API_KEY"</span>] <span class="op">=</span> <span class="st">"your_census_api_key_here"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<hr>
 </section>
-<section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>Over the past decade, a prominent social and economic issue has been the lack of accessibility to housing. The notion of the American Dream suggests that all citizens should be afforded the privilege of owning a house provided they work hard and manage money accordingly, but in recent years, this dream has become less realistic for many Americans.</p>
-<p>While it would have been ideal to look into single-family home purchase accessibility for the entirety of the United States of America, given the constraints we were working with, we decided to focus on data from Utah, found through the US Census.</p>
+<section id="reading-in-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="reading-in-the-data">Reading in the Data</h2>
+<div id="9ac78053" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utah_housing <span class="im">import</span> fetch_all_years, OUTCOME, BASE_PREDICTORS, COMPLEX_PREDICTORS</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Fetch ACS 5-year estimates for Utah census tracts, 2009–2023</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> fetch_all_years(years<span class="op">=</span><span class="bu">range</span>(<span class="dv">2009</span>, <span class="dv">2024</span>))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="02cbb72a" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Save to CSV so you can reload without hitting the API again</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>df.to_csv(<span class="st">"data/utah_housing.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="c45fc712" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reload from CSV (faster than re-fetching)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"data/utah_housing.csv"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<hr>
 </section>
-<section id="data-acquisition-and-wrangling" class="level2">
-<h2 class="anchored" data-anchor-id="data-acquisition-and-wrangling">Data Acquisition and Wrangling</h2>
-<p>Data was obtained through the US Census Bureau’s American Community Survey (2013-2023). We constructed a dataset spanning 772 census tracts across Utah.</p>
+<section id="initial-exploration" class="level2">
+<h2 class="anchored" data-anchor-id="initial-exploration">Initial Exploration</h2>
+<div id="245c0311" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shape:"</span>, df.shape)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Outcome variable:"</span>, OUTCOME)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Base predictors:"</span>, BASE_PREDICTORS)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Complex predictors:"</span>, COMPLEX_PREDICTORS)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="48f04fe5" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for missing values in key columns</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>analysis_cols <span class="op">=</span> [<span class="st">"year"</span>, <span class="st">"GEOID"</span>] <span class="op">+</span> [OUTCOME] <span class="op">+</span> COMPLEX_PREDICTORS</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>df[analysis_cols].isnull().<span class="bu">sum</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<hr>
 </section>
-<section id="model-selection-and-validation" class="level2">
-<h2 class="anchored" data-anchor-id="model-selection-and-validation">Model Selection and Validation</h2>
-<p>We built a two-way fixed effects (or fixed panel) regression model to identify within-tract drivers of ownership costs. We initially wanted to use a simple multiple linear regression model, but found that we were explaining almost none of the variance in our data. A fixed effects model helps to remedy the inevitable unknown elements of variance in such an economic model, as it holds certain elements constant to account for inherent variance.</p>
-<p>Our model controls for tract-level fixed effects, meaning time-invariant characteristics of a neighborhood like location and county <span class="math inline">\(\times\)</span> year fixed effects, which account for unknown variables like employer expansion and COVID-era impacts.</p>
-<p><span class="math display">\[
-y_{it} = \beta X_{it} + \alpha_i + \lambda_{c(i), t} + u_{i,t}
-\]</span></p>
-<p>where $i = $ tract (Census GEOID), $t = $ year, and $c(i) = $ county of tract <span class="math inline">\(i\)</span>.</p>
-<p><span class="math inline">\(\alpha_i\)</span> stands for tract fixed effect, which controls for anything constant within a tract over time, like location desirability, zoning baseline, and neighborhood quality. In other words, <span class="math inline">\(\alpha\)</span> lets us compare a tract to itself over time.</p>
-<p><span class="math inline">\(\lambda_{c(i), t}\)</span> stands for the county <span class="math inline">\(\times\)</span> year fixed effect, controlling for anything affecting a county in a specific year; things like local economic shocks (ex: big employer entering or leaving), policy changes, or impacts from COVID. In other words, <span class="math inline">\(\lambda_{c(i), t}\)</span> allows us to remove shared shocks across nearby areas at the same time.</p>
+<section id="cleaning-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="cleaning-the-data">Cleaning the Data</h2>
+<!-- TODO: Describe any cleaning steps specific to your data (dropping nulls, filtering counties, etc.) -->
+<div id="951d4a23" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop rows missing the outcome variable</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>df_clean <span class="op">=</span> df.dropna(subset<span class="op">=</span>[OUTCOME]).copy()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract county name from the NAME field for easier filtering</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>df_clean[<span class="st">"county_name"</span>] <span class="op">=</span> df_clean[<span class="st">"NAME"</span>].<span class="bu">str</span>.extract(<span class="vs">r",</span><span class="dv">\s</span><span class="op">*</span><span class="kw">(</span><span class="dv">.</span><span class="op">+?</span><span class="kw">)</span><span class="dv">\s</span><span class="op">+</span><span class="vs">County"</span>, expand<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Rows after cleaning: </span><span class="sc">{</span><span class="bu">len</span>(df_clean)<span class="sc">:,}</span><span class="ss">"</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>df_clean.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<hr>
 </section>
-<section id="analyses-results-and-interpretation" class="level2">
-<h2 class="anchored" data-anchor-id="analyses-results-and-interpretation">Analyses, Results, and Interpretation</h2>
-<p>A table depicting the results of the fixed panel model is below.</p>
-<p>The complexity of this model leads to a lot of things to consider. For example, while “Absorbed <span class="math inline">\(R^2\)</span>” is impressively high, the county <span class="math inline">\(\times\)</span> year fixed effect will by nature increase the <span class="math inline">\(R^2\)</span> metric. So, we need to use other, more subjective metrics to judge the validity of our model. We found after fitting two different models (the first being a one-way fixed effects model) that main variables were more stable in our current model.</p>
-<p>In particular, the coefficients on median household income and the owner-renter income gap remained consistent in both magnitude and statistical significance, suggesting that these relationships are not driven by broader county-level shocks. Overall, this stability across model specifications provides evidence that our results are not sensitive to unobserved, time-varying county-level factors, and supports the use of the more complex model as a credible framework for identifying within-tract drivers of housing costs.</p>
+<section id="subsetting-by-county-or-year" class="level2">
+<h2 class="anchored" data-anchor-id="subsetting-by-county-or-year">Subsetting by County or Year</h2>
+<div id="16bb0a0b" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter to a specific county</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>salt_lake <span class="op">=</span> df_clean[df_clean[<span class="st">"county_name"</span>] <span class="op">==</span> <span class="st">"Salt Lake"</span>]</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(salt_lake.shape)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter to a specific year</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>df_2023 <span class="op">=</span> df_clean[df_clean[<span class="st">"year"</span>] <span class="op">==</span> <span class="dv">2023</span>]</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_2023.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<hr>
 </section>
-<section id="conclusions" class="level2">
-<h2 class="anchored" data-anchor-id="conclusions">Conclusions</h2>
-<p>this file used to be about.qmd and titled About</p>
+<section id="basic-summary-statistics" class="level2">
+<h2 class="anchored" data-anchor-id="basic-summary-statistics">Basic Summary Statistics</h2>
+<div id="4a800859" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>summary_cols <span class="op">=</span> [OUTCOME] <span class="op">+</span> COMPLEX_PREDICTORS</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>df_clean[summary_cols].describe().<span class="bu">round</span>(<span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<hr>
+<p>The data is now ready for EDA and modeling (see the <a href="TechnicalReport.qmd">Technical Report</a>).</p>
 
 
 </section>
