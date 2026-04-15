@@ -24,41 +24,38 @@ We built a two-way fixed effects (or fixed panel) regression model to identify w
 
 Our model controls for tract-level fixed effects, meaning time-invariant characteristics of a neighborhood like location and county $\times$ year fixed effects, which account for unknown variables like employer expansion and COVID-era impacts. 
 
+The model is as follows: 
+
 $$
 y_{it} = \beta X_{it} + \alpha_i + \lambda_{c(i), t} + u_{i,t}
 $$
 
-where $i = $ tract (Census GEOID), $t = $ year, and $c(i) = $ county of tract $i$.
+where $i =$ tract (Census GEOID), $t =$ year, and $c(i) =$ county of tract $i$.
 
 $\alpha_i$ stands for tract fixed effect, which controls for anything constant within a tract over time, like location desirability, zoning baseline, and neighborhood quality. In other words, $\alpha$ lets us compare a tract to itself over time. 
 
 $\lambda_{c(i), t}$ stands for the county $\times$ year fixed effect, controlling for anything affecting a county in a specific year; things like local economic shocks (ex: big employer entering or leaving), policy changes, or impacts from COVID. In other words, $\lambda_{c(i), t}$ allows us to remove shared shocks across nearby areas at the same time.
+
+## Model Building 
+
 
 
 ## Analyses, Results, and Interpretation ##
 
 A table depicting the results of the fixed panel model is below. 
 
+### Fixed Effects Model (Tract FE + County×Year FE)
 
-\begin{table}[htbp]
-\centering
-\caption{Fixed Effects Model (Tract FE + County$\times$Year FE)}
-\begin{tabular}{lrrrrrr}
-\toprule
- & Coef & Std. Err. & t-stat & p-value & CI Low & CI High \\
-\midrule
-pct\_sf\_renter\_occupied & -103.558 & 64.051 & -1.617 & 0.106 & -229.097 & 21.981 \\
-median\_household\_income & 0.0018 & 0.0004 & 4.851 & 0.000 & 0.0011 & 0.0026 \\
-owner\_renter\_income\_gap & 0.0006 & 0.0002 & 3.925 & 0.000 & 0.0003 & 0.0009 \\
-pct\_vacant & 31.207 & 72.176 & 0.432 & 0.666 & -110.258 & 172.673 \\
-pop\_in\_occupied\_total & 0.0088 & 0.0046 & 1.934 & 0.053 & -0.0001 & 0.0178 \\
-\midrule
-Observations & \multicolumn{6}{r}{8,284} \\
-Absorbed $R^2$ & \multicolumn{6}{r}{0.9455} \\
-\bottomrule
-\end{tabular}
-\end{table}
+| Variable                     | Coef     | Std. Err. | t-stat | p-value | CI Low   | CI High  |
+|------------------------------|----------|-----------|--------|---------|----------|----------|
+| pct_sf_renter_occupied       | -103.558 | 64.051    | -1.617 | 0.106   | -229.097 | 21.981   |
+| median_household_income      | 0.0018   | 0.0004    | 4.851  | 0.000   | 0.0011   | 0.0026   |
+| owner_renter_income_gap      | 0.0006   | 0.0002    | 3.925  | 0.000   | 0.0003   | 0.0009   |
+| pct_vacant                   | 31.207   | 72.176    | 0.432  | 0.666   | -110.258 | 172.673  |
+| pop_in_occupied_total        | 0.0088   | 0.0046    | 1.934  | 0.053   | -0.0001  | 0.0178   |
 
+**Observations:** 8,284  
+**Absorbed R²:** 0.9455
 
 The complexity of this model leads to a lot of things to consider. For example, while "Absorbed $R^2$" is impressively high, the county $\times$ year fixed effect will by nature increase the $R^2$ metric. So, we need to use other, more subjective metrics to judge the validity of our model. We found after fitting two different models (the first being a one-way fixed effects model) that main variables were more stable in our current model. 
 
@@ -66,9 +63,9 @@ In particular, the coefficients on median household income and the owner-renter 
 
 ## Conclusions ##
  
+We were successfully able to establish that significant contributors to the rise in house prices in Utah are median household income, the owner-renter income gap, and population growth. 
+
+While there are still many questions we would like to explore, like "how do zoning laws affect house prices?" and "is it really less profitable to build less expensive homes?", we consider this project a success. 
 
 
 
-
-
-this file used to be about.qmd and titled About

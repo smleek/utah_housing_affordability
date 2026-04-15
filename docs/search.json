@@ -28,11 +28,11 @@
     "text": "Initial Exploration\n\nprint(\"Shape:\", df.shape)\nprint(\"\\nOutcome variable:\", OUTCOME)\nprint(\"Base predictors:\", BASE_PREDICTORS)\nprint(\"Complex predictors:\", COMPLEX_PREDICTORS)\n\n\n# Check for missing values in key columns\nanalysis_cols = [\"year\", \"GEOID\"] + [OUTCOME] + COMPLEX_PREDICTORS\ndf[analysis_cols].isnull().sum()"
   },
   {
-    "objectID": "tutorial.html#cleaning-the-data",
-    "href": "tutorial.html#cleaning-the-data",
+    "objectID": "tutorial.html#cleaning-the-data-not-necessary-for-analysis-with-package",
+    "href": "tutorial.html#cleaning-the-data-not-necessary-for-analysis-with-package",
     "title": "Tutorial: Accessing and Exploring the Data",
-    "section": "Cleaning the Data",
-    "text": "Cleaning the Data\n\n\n# Drop rows missing the outcome variable\ndf_clean = df.dropna(subset=[OUTCOME]).copy()\n\n# Extract county name from the NAME field for easier filtering\ndf_clean[\"county_name\"] = df_clean[\"NAME\"].str.extract(r\",\\s*(.+?)\\s+County\", expand=False)\n\nprint(f\"Rows after cleaning: {len(df_clean):,}\")\ndf_clean.head()"
+    "section": "Cleaning the Data (not necessary for analysis with package)",
+    "text": "Cleaning the Data (not necessary for analysis with package)\n\n# Drop rows missing the outcome variable\ndf_clean = df.dropna(subset=[OUTCOME]).copy()\n\n# Extract county name from the NAME field for easier filtering\ndf_clean[\"county_name\"] = df_clean[\"NAME\"].str.extract(r\",\\s*(.+?)\\s+County\", expand=False)\n\nprint(f\"Rows after cleaning: {len(df_clean):,}\")\ndf_clean.head()"
   },
   {
     "objectID": "tutorial.html#subsetting-by-county-or-year",
@@ -123,21 +123,28 @@
     "href": "technical_report.html#model-selection-and-validation",
     "title": "Technical Report",
     "section": "Model Selection and Validation",
-    "text": "Model Selection and Validation\nWe built a two-way fixed effects (or fixed panel) regression model to identify within-tract drivers of ownership costs. We initially wanted to use a simple multiple linear regression model, but found that we were explaining almost none of the variance in our data. A fixed effects model helps to remedy the inevitable unknown elements of variance in such an economic model, as it holds certain elements constant to account for inherent variance.\nOur model controls for tract-level fixed effects, meaning time-invariant characteristics of a neighborhood like location and county \\(\\times\\) year fixed effects, which account for unknown variables like employer expansion and COVID-era impacts.\n\\[\ny_{it} = \\beta X_{it} + \\alpha_i + \\lambda_{c(i), t} + u_{i,t}\n\\]\nwhere $i = $ tract (Census GEOID), $t = $ year, and $c(i) = $ county of tract \\(i\\).\n\\(\\alpha_i\\) stands for tract fixed effect, which controls for anything constant within a tract over time, like location desirability, zoning baseline, and neighborhood quality. In other words, \\(\\alpha\\) lets us compare a tract to itself over time.\n\\(\\lambda_{c(i), t}\\) stands for the county \\(\\times\\) year fixed effect, controlling for anything affecting a county in a specific year; things like local economic shocks (ex: big employer entering or leaving), policy changes, or impacts from COVID. In other words, \\(\\lambda_{c(i), t}\\) allows us to remove shared shocks across nearby areas at the same time."
+    "text": "Model Selection and Validation\nWe built a two-way fixed effects (or fixed panel) regression model to identify within-tract drivers of ownership costs. We initially wanted to use a simple multiple linear regression model, but found that we were explaining almost none of the variance in our data. A fixed effects model helps to remedy the inevitable unknown elements of variance in such an economic model, as it holds certain elements constant to account for inherent variance.\nOur model controls for tract-level fixed effects, meaning time-invariant characteristics of a neighborhood like location and county \\(\\times\\) year fixed effects, which account for unknown variables like employer expansion and COVID-era impacts.\nThe model is as follows:\n\\[\ny_{it} = \\beta X_{it} + \\alpha_i + \\lambda_{c(i), t} + u_{i,t}\n\\]\nwhere \\(i =\\) tract (Census GEOID), \\(t =\\) year, and \\(c(i) =\\) county of tract \\(i\\).\n\\(\\alpha_i\\) stands for tract fixed effect, which controls for anything constant within a tract over time, like location desirability, zoning baseline, and neighborhood quality. In other words, \\(\\alpha\\) lets us compare a tract to itself over time.\n\\(\\lambda_{c(i), t}\\) stands for the county \\(\\times\\) year fixed effect, controlling for anything affecting a county in a specific year; things like local economic shocks (ex: big employer entering or leaving), policy changes, or impacts from COVID. In other words, \\(\\lambda_{c(i), t}\\) allows us to remove shared shocks across nearby areas at the same time."
+  },
+  {
+    "objectID": "technical_report.html#model-building",
+    "href": "technical_report.html#model-building",
+    "title": "Technical Report",
+    "section": "Model Building",
+    "text": "Model Building"
   },
   {
     "objectID": "technical_report.html#analyses-results-and-interpretation",
     "href": "technical_report.html#analyses-results-and-interpretation",
     "title": "Technical Report",
     "section": "Analyses, Results, and Interpretation",
-    "text": "Analyses, Results, and Interpretation\nA table depicting the results of the fixed panel model is below.\nThe complexity of this model leads to a lot of things to consider. For example, while “Absorbed \\(R^2\\)” is impressively high, the county \\(\\times\\) year fixed effect will by nature increase the \\(R^2\\) metric. So, we need to use other, more subjective metrics to judge the validity of our model. We found after fitting two different models (the first being a one-way fixed effects model) that main variables were more stable in our current model.\nIn particular, the coefficients on median household income and the owner-renter income gap remained consistent in both magnitude and statistical significance, suggesting that these relationships are not driven by broader county-level shocks. Overall, this stability across model specifications provides evidence that our results are not sensitive to unobserved, time-varying county-level factors, and supports the use of the more complex model as a credible framework for identifying within-tract drivers of housing costs."
+    "text": "Analyses, Results, and Interpretation\nA table depicting the results of the fixed panel model is below.\n\nFixed Effects Model (Tract FE + County×Year FE)\n\n\n\n\n\n\n\n\n\n\n\n\nVariable\nCoef\nStd. Err.\nt-stat\np-value\nCI Low\nCI High\n\n\n\n\npct_sf_renter_occupied\n-103.558\n64.051\n-1.617\n0.106\n-229.097\n21.981\n\n\nmedian_household_income\n0.0018\n0.0004\n4.851\n0.000\n0.0011\n0.0026\n\n\nowner_renter_income_gap\n0.0006\n0.0002\n3.925\n0.000\n0.0003\n0.0009\n\n\npct_vacant\n31.207\n72.176\n0.432\n0.666\n-110.258\n172.673\n\n\npop_in_occupied_total\n0.0088\n0.0046\n1.934\n0.053\n-0.0001\n0.0178\n\n\n\nObservations: 8,284\nAbsorbed R²: 0.9455\nThe complexity of this model leads to a lot of things to consider. For example, while “Absorbed \\(R^2\\)” is impressively high, the county \\(\\times\\) year fixed effect will by nature increase the \\(R^2\\) metric. So, we need to use other, more subjective metrics to judge the validity of our model. We found after fitting two different models (the first being a one-way fixed effects model) that main variables were more stable in our current model.\nIn particular, the coefficients on median household income and the owner-renter income gap remained consistent in both magnitude and statistical significance, suggesting that these relationships are not driven by broader county-level shocks. Overall, this stability across model specifications provides evidence that our results are not sensitive to unobserved, time-varying county-level factors, and supports the use of the more complex model as a credible framework for identifying within-tract drivers of housing costs."
   },
   {
     "objectID": "technical_report.html#conclusions",
     "href": "technical_report.html#conclusions",
     "title": "Technical Report",
     "section": "Conclusions",
-    "text": "Conclusions\nthis file used to be about.qmd and titled About"
+    "text": "Conclusions\nWe were successfully able to establish that significant contributors to the rise in house prices in Utah are median household income, the owner-renter income gap, and population growth.\nWhile there are still many questions we would like to explore, like “how do zoning laws affect house prices?” and “is it really less profitable to build less expensive homes?”, we consider this project a success."
   },
   {
     "objectID": "index.html",

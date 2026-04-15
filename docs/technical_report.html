@@ -155,7 +155,11 @@ window.Quarto = {
   <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
   <li><a href="#data-acquisition-and-wrangling" id="toc-data-acquisition-and-wrangling" class="nav-link" data-scroll-target="#data-acquisition-and-wrangling">Data Acquisition and Wrangling</a></li>
   <li><a href="#model-selection-and-validation" id="toc-model-selection-and-validation" class="nav-link" data-scroll-target="#model-selection-and-validation">Model Selection and Validation</a></li>
-  <li><a href="#analyses-results-and-interpretation" id="toc-analyses-results-and-interpretation" class="nav-link" data-scroll-target="#analyses-results-and-interpretation">Analyses, Results, and Interpretation</a></li>
+  <li><a href="#model-building" id="toc-model-building" class="nav-link" data-scroll-target="#model-building">Model Building</a></li>
+  <li><a href="#analyses-results-and-interpretation" id="toc-analyses-results-and-interpretation" class="nav-link" data-scroll-target="#analyses-results-and-interpretation">Analyses, Results, and Interpretation</a>
+  <ul class="collapse">
+  <li><a href="#fixed-effects-model-tract-fe-countyyear-fe" id="toc-fixed-effects-model-tract-fe-countyyear-fe" class="nav-link" data-scroll-target="#fixed-effects-model-tract-fe-countyyear-fe">Fixed Effects Model (Tract FE + County×Year FE)</a></li>
+  </ul></li>
   <li><a href="#conclusions" id="toc-conclusions" class="nav-link" data-scroll-target="#conclusions">Conclusions</a></li>
   </ul>
 </nav>
@@ -199,22 +203,101 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="model-selection-and-validation">Model Selection and Validation</h2>
 <p>We built a two-way fixed effects (or fixed panel) regression model to identify within-tract drivers of ownership costs. We initially wanted to use a simple multiple linear regression model, but found that we were explaining almost none of the variance in our data. A fixed effects model helps to remedy the inevitable unknown elements of variance in such an economic model, as it holds certain elements constant to account for inherent variance.</p>
 <p>Our model controls for tract-level fixed effects, meaning time-invariant characteristics of a neighborhood like location and county <span class="math inline">\(\times\)</span> year fixed effects, which account for unknown variables like employer expansion and COVID-era impacts.</p>
+<p>The model is as follows:</p>
 <p><span class="math display">\[
 y_{it} = \beta X_{it} + \alpha_i + \lambda_{c(i), t} + u_{i,t}
 \]</span></p>
-<p>where $i = $ tract (Census GEOID), $t = $ year, and $c(i) = $ county of tract <span class="math inline">\(i\)</span>.</p>
+<p>where <span class="math inline">\(i =\)</span> tract (Census GEOID), <span class="math inline">\(t =\)</span> year, and <span class="math inline">\(c(i) =\)</span> county of tract <span class="math inline">\(i\)</span>.</p>
 <p><span class="math inline">\(\alpha_i\)</span> stands for tract fixed effect, which controls for anything constant within a tract over time, like location desirability, zoning baseline, and neighborhood quality. In other words, <span class="math inline">\(\alpha\)</span> lets us compare a tract to itself over time.</p>
 <p><span class="math inline">\(\lambda_{c(i), t}\)</span> stands for the county <span class="math inline">\(\times\)</span> year fixed effect, controlling for anything affecting a county in a specific year; things like local economic shocks (ex: big employer entering or leaving), policy changes, or impacts from COVID. In other words, <span class="math inline">\(\lambda_{c(i), t}\)</span> allows us to remove shared shocks across nearby areas at the same time.</p>
+</section>
+<section id="model-building" class="level2">
+<h2 class="anchored" data-anchor-id="model-building">Model Building</h2>
 </section>
 <section id="analyses-results-and-interpretation" class="level2">
 <h2 class="anchored" data-anchor-id="analyses-results-and-interpretation">Analyses, Results, and Interpretation</h2>
 <p>A table depicting the results of the fixed panel model is below.</p>
+<section id="fixed-effects-model-tract-fe-countyyear-fe" class="level3">
+<h3 class="anchored" data-anchor-id="fixed-effects-model-tract-fe-countyyear-fe">Fixed Effects Model (Tract FE + County×Year FE)</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 34%">
+<col style="width: 11%">
+<col style="width: 12%">
+<col style="width: 9%">
+<col style="width: 10%">
+<col style="width: 11%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Coef</th>
+<th>Std. Err.</th>
+<th>t-stat</th>
+<th>p-value</th>
+<th>CI Low</th>
+<th>CI High</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>pct_sf_renter_occupied</td>
+<td>-103.558</td>
+<td>64.051</td>
+<td>-1.617</td>
+<td>0.106</td>
+<td>-229.097</td>
+<td>21.981</td>
+</tr>
+<tr class="even">
+<td>median_household_income</td>
+<td>0.0018</td>
+<td>0.0004</td>
+<td>4.851</td>
+<td>0.000</td>
+<td>0.0011</td>
+<td>0.0026</td>
+</tr>
+<tr class="odd">
+<td>owner_renter_income_gap</td>
+<td>0.0006</td>
+<td>0.0002</td>
+<td>3.925</td>
+<td>0.000</td>
+<td>0.0003</td>
+<td>0.0009</td>
+</tr>
+<tr class="even">
+<td>pct_vacant</td>
+<td>31.207</td>
+<td>72.176</td>
+<td>0.432</td>
+<td>0.666</td>
+<td>-110.258</td>
+<td>172.673</td>
+</tr>
+<tr class="odd">
+<td>pop_in_occupied_total</td>
+<td>0.0088</td>
+<td>0.0046</td>
+<td>1.934</td>
+<td>0.053</td>
+<td>-0.0001</td>
+<td>0.0178</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Observations:</strong> 8,284<br>
+<strong>Absorbed R²:</strong> 0.9455</p>
 <p>The complexity of this model leads to a lot of things to consider. For example, while “Absorbed <span class="math inline">\(R^2\)</span>” is impressively high, the county <span class="math inline">\(\times\)</span> year fixed effect will by nature increase the <span class="math inline">\(R^2\)</span> metric. So, we need to use other, more subjective metrics to judge the validity of our model. We found after fitting two different models (the first being a one-way fixed effects model) that main variables were more stable in our current model.</p>
 <p>In particular, the coefficients on median household income and the owner-renter income gap remained consistent in both magnitude and statistical significance, suggesting that these relationships are not driven by broader county-level shocks. Overall, this stability across model specifications provides evidence that our results are not sensitive to unobserved, time-varying county-level factors, and supports the use of the more complex model as a credible framework for identifying within-tract drivers of housing costs.</p>
 </section>
+</section>
 <section id="conclusions" class="level2">
 <h2 class="anchored" data-anchor-id="conclusions">Conclusions</h2>
-<p>this file used to be about.qmd and titled About</p>
+<p>We were successfully able to establish that significant contributors to the rise in house prices in Utah are median household income, the owner-renter income gap, and population growth.</p>
+<p>While there are still many questions we would like to explore, like “how do zoning laws affect house prices?” and “is it really less profitable to build less expensive homes?”, we consider this project a success.</p>
 
 
 </section>

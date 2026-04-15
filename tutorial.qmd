@@ -72,9 +72,8 @@ df[analysis_cols].isnull().sum()
 
 ---
 
-## Cleaning the Data
+## Cleaning the Data (not necessary for analysis with package)
 
-<!-- TODO: Describe any cleaning steps specific to your data (dropping nulls, filtering counties, etc.) -->
 
 ```{python}
 #| eval: false
