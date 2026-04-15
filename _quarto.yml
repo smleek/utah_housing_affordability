@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "april13"
+  title: "Utah Housing Affordability Analysis - STAT 386"
   navbar:
     left:
       - href: index.qmd
